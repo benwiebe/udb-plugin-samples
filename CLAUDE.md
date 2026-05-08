@@ -14,16 +14,19 @@ The plugin is loaded by udb-core and must export a `Plugin` variable of type `ud
 
 - **Main entry point**: `udb_sample_plugin.go` - Implements the `UdbPlugin` interface with methods to register boards and datasources
 - **Boards**: Implement the `types.Board[T]` interface - visual displays that render to images
-  - `boards/single_colour.go` - Example static board that fills the display with a configurable color
+  - `boards/single_colour.go` - Static board that fills the display with a configurable colour; pre-builds its image in `Init()`
+  - `boards/digital_clock.go` - Dynamic board that displays the current time; pre-computes font layout in `Init()`
 - **Datasources**: Implement the `types.Datasource[T]` interface - provide data to boards
-  - `datasources/current_time.go` - Example datasource that returns the current time
+  - `datasources/current_time.go` - Returns the current time via `time.Now()`; no background goroutine needed
 
 ### Key Concepts
 
 - **Boards** must implement: `GetId()`, `GetName()`, `GetSupportedDimensions()`, `GetType()`, `GetDatasourceType()`, `Init()`, and `Render()`
-- **Static vs Dynamic boards**: `BoardTypeStatic` boards don't need real-time updates; `BoardTypeDynamic` requires periodic data refresh
-- **Configuration**: Boards accept optional JSON configuration via `Init()` (e.g., `SingleColourBoard` accepts a hex color string)
-- **Rendering**: Boards return `image.Image` objects generated from their state
+- **Board types**: `BoardTypeStatic` renders once and holds the image; `BoardTypeAnimated` returns a pre-baked frame sequence; `BoardTypeDynamic` is called repeatedly with each call returning the next frame
+- **Dimensions in `Init()`**: Boards receive `types.BoardDimensions` in `Init()`, not in `Render()`. Pre-compute any layout values (font sizes, image buffers, drawing coordinates) that depend on the display size here. `Render()` takes no parameters.
+- **Configuration**: Boards accept optional JSON configuration via `Init()` (e.g., `SingleColourBoard` accepts a hex colour string; `DigitalClockBoard` accepts `format`, `colour`, and `blinkColon`)
+- **Datasource lifecycle**: Datasources must implement `Start(ctx context.Context) error` (called once at startup — launch background goroutines here) and `DataChanged() <-chan struct{}` (return a channel to trigger immediate re-renders on data change, or `nil` for no push notifications)
+- **Rendering**: `Render()` calls `datasource.GetData()` to get the latest cached value, constructs an `image.Image`, and returns it (or an `AnimationFrame` for animated/dynamic boards)
 
 ## Development Commands
 
@@ -59,10 +62,10 @@ To add a new board:
 3. Return it from `GetAllBoards()`
 
 To add a new datasource:
-1. Create a new file in the `datasources/` directory implementing the `types.Datasource[T]` interface
-2. Register it in the plugin if needed
+1. Create a new file in the `datasources/` directory implementing the `types.Datasource[T]` interface (including `Start()` and `DataChanged()`)
+2. Register it in `udb_sample_plugin.go` within `GetDatasourceMap()`
+3. Return it from `GetAllDatasources()`
 
 ## Dependencies
 
 - `github.com/benwiebe/udb-plugin-library` - Core plugin interfaces and types
-- `github.com/benwiebe/udb-core` - Board types and core functionality
