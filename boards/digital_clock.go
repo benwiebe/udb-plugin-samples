@@ -38,7 +38,7 @@ type DigitalClockBoard struct {
 	colour     color.Color
 	blinkColon bool
 
-	// Lazily initialised on first Render; stable because dimensions and config don't change post-Init.
+	// Pre-computed in Init from the display dimensions and config.
 	cachedDims types.BoardDimensions
 	cachedFace font.Face
 	cachedDot  fixed.Point26_6 // pre-computed baseline origin
@@ -57,53 +57,49 @@ func (b *DigitalClockBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *DigitalClockBoard) GetType() types.BoardType  { return types.BoardTypeDynamic }
 func (b *DigitalClockBoard) GetDatasourceType() string { return "UdbSamplePlugin/CurrentTime" }
 
-func (b *DigitalClockBoard) Init(cfg json.RawMessage, datasource types.Datasource[any]) error {
+func (b *DigitalClockBoard) Init(cfg json.RawMessage, datasource types.Datasource[any], dimensions types.BoardDimensions) error {
 	b.datasource = datasource
 	b.format = "15:04"
 	b.colour = color.White
 	b.blinkColon = true
 
-	if len(cfg) == 0 {
-		return nil
-	}
-
-	var parsed struct {
-		Format     string `json:"format"`
-		Colour     string `json:"colour"`
-		BlinkColon *bool  `json:"blinkColon"`
-	}
-	if err := json.Unmarshal(cfg, &parsed); err != nil {
-		return err
-	}
-	if parsed.Format != "" {
-		b.format = parsed.Format
-	}
-	if parsed.Colour != "" {
-		c, err := parseHexColour(parsed.Colour)
-		if err != nil {
+	if len(cfg) > 0 {
+		var parsed struct {
+			Format     string `json:"format"`
+			Colour     string `json:"colour"`
+			BlinkColon *bool  `json:"blinkColon"`
+		}
+		if err := json.Unmarshal(cfg, &parsed); err != nil {
 			return err
 		}
-		b.colour = c
+		if parsed.Format != "" {
+			b.format = parsed.Format
+		}
+		if parsed.Colour != "" {
+			c, err := parseHexColour(parsed.Colour)
+			if err != nil {
+				return err
+			}
+			b.colour = c
+		}
+		if parsed.BlinkColon != nil {
+			b.blinkColon = *parsed.BlinkColon
+		}
 	}
-	if parsed.BlinkColon != nil {
-		b.blinkColon = *parsed.BlinkColon
-	}
+
+	b.buildCache(dimensions)
 	return nil
 }
 
-func (b *DigitalClockBoard) Render(dimensions types.BoardDimensions) types.AnimationFrame {
+func (b *DigitalClockBoard) Render() types.AnimationFrame {
 	t := b.datasource.GetData().(time.Time)
-
-	if b.cachedFace == nil || b.cachedDims != dimensions {
-		b.buildCache(dimensions)
-	}
 
 	timeStr := t.Format(b.format)
 	if b.blinkColon && t.Second()%2 == 1 {
 		timeStr = strings.ReplaceAll(timeStr, ":", " ")
 	}
 
-	img := image.NewRGBA(image.Rect(0, 0, dimensions.Width, dimensions.Height))
+	img := image.NewRGBA(image.Rect(0, 0, b.cachedDims.Width, b.cachedDims.Height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{color.Black}, image.Point{}, draw.Src)
 
 	d := font.Drawer{
@@ -114,14 +110,17 @@ func (b *DigitalClockBoard) Render(dimensions types.BoardDimensions) types.Anima
 	}
 	d.DrawString(timeStr)
 
-	return types.AnimationFrame{
-		Img:      img,
-		Duration: 100 * time.Millisecond,
+	// Use 500ms when blinkColon is on or when the format includes seconds — sub-second
+	// precision is needed in both cases. Otherwise 1s is sufficient.
+	dur := time.Second
+	if b.blinkColon || strings.Contains(b.format, "05") {
+		dur = 500 * time.Millisecond
 	}
+	return types.AnimationFrame{Img: img, Duration: dur}
 }
 
 // buildCache computes and stores the font face, baseline origin, and colour source for the
-// given dimensions. Called once on first render; re-runs only if dimensions somehow change.
+// given dimensions. Called once from Init.
 func (b *DigitalClockBoard) buildCache(dimensions types.BoardDimensions) {
 	if b.cachedFace != nil {
 		b.cachedFace.Close()

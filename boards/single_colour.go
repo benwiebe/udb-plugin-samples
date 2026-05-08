@@ -15,8 +15,9 @@ import (
 // SingleColourBoard is a trivial example of a UDB board which displays a single colour
 // on the entire display.
 type SingleColourBoard struct {
-	id     string
-	colour color.Color
+	id          string
+	colour      color.Color
+	cachedImage image.Image
 }
 
 // NewSingleColourBoard creates a SingleColourBoard with the given ID.
@@ -46,7 +47,7 @@ func (b *SingleColourBoard) GetDatasourceType() string {
 
 // Init accepts an optional config JSON with a "colour" field containing a hex colour string
 // (e.g. "#FF0000" or "FF0000"). Defaults to white if omitted.
-func (b *SingleColourBoard) Init(cfg json.RawMessage, datasource types.Datasource[any]) error {
+func (b *SingleColourBoard) Init(cfg json.RawMessage, datasource types.Datasource[any], dimensions types.BoardDimensions) error {
 	if len(cfg) > 0 {
 		var parsed struct {
 			Colour string `json:"colour"`
@@ -65,13 +66,15 @@ func (b *SingleColourBoard) Init(cfg json.RawMessage, datasource types.Datasourc
 	if b.colour == nil {
 		b.colour = color.White
 	}
+
+	img := image.NewRGBA(image.Rect(0, 0, dimensions.Width, dimensions.Height))
+	draw.Draw(img, img.Bounds(), &image.Uniform{b.colour}, image.Point{}, draw.Src)
+	b.cachedImage = img
 	return nil
 }
 
-func (b *SingleColourBoard) Render(dimensions types.BoardDimensions) image.Image {
-	img := image.NewRGBA(image.Rect(0, 0, dimensions.Width, dimensions.Height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{b.colour}, image.Point{}, draw.Src)
-	return img
+func (b *SingleColourBoard) Render() image.Image {
+	return b.cachedImage
 }
 
 // parseHexColour parses a "#RRGGBB" or "RRGGBB" hex string into a color.RGBA.
@@ -88,9 +91,9 @@ func parseHexColour(s string) (color.RGBA, error) {
 	if err != nil {
 		return color.RGBA{}, fmt.Errorf("invalid hex colour %q: %w", s, err)
 	}
-	b, err := strconv.ParseUint(s[4:6], 16, 8)
+	b2, err := strconv.ParseUint(s[4:6], 16, 8)
 	if err != nil {
 		return color.RGBA{}, fmt.Errorf("invalid hex colour %q: %w", s, err)
 	}
-	return color.RGBA{R: uint8(r), G: uint8(g), B: uint8(b), A: 255}, nil
+	return color.RGBA{R: uint8(r), G: uint8(g), B: uint8(b2), A: 255}, nil
 }

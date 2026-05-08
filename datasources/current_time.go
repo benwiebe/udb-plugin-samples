@@ -1,6 +1,9 @@
 package datasources
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // CurrentTimeDatasource Is a trivial dummy datasource to demonstrate how to
 // implement a UDB Datasource. It will return the current time as its data.
@@ -22,3 +25,8 @@ func (c *CurrentTimeDatasource) GetType() string {
 func (c *CurrentTimeDatasource) GetData() any {
 	return time.Now()
 }
+
+func (c *CurrentTimeDatasource) Start(_ context.Context) error { return nil }
+
+// DataChanged returns nil because time.Now() is always fresh — no push notification needed.
+func (c *CurrentTimeDatasource) DataChanged() <-chan struct{} { return nil }
