@@ -29,7 +29,7 @@ The plugin is loaded by udb-core and must export a `Plugin` variable of type `ud
 
 ```bash
 # Build the plugin as a shared library (required for udb-core loading)
-go build -o udb_sample_plugin.so -buildmode=plugin
+go build -o udb-plugin-samples.so -buildmode=plugin
 
 # Run tests
 go test ./...
