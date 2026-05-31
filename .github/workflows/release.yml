@@ -7,17 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: go.work
 
       - name: Build plugin
-        run: make build
+        run: GOWORK=off make build
 
       - name: Create release
         uses: softprops/action-gh-release@v2
