@@ -1,0 +1,13 @@
+sample_image.png is a resized version of the image "Abstract streaks of purple and pink light"
+by Jason Leung on Unsplash.
+
+The original image is available at:
+https://unsplash.com/photos/abstract-streaks-of-purple-and-pink-light-pWXNmYWgqF0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
+The image was published under the Unsplash License, available at:
+https://unsplash.com/license
+
+Per the license, this image may be modified and used for both non-commercial and commercial purposes, however
+you may not sell it, and attribution to the original artist is highly encouraged. See the full license text for more
+information.
+

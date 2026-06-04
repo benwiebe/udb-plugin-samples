@@ -21,8 +21,13 @@ func (p *UdbSamplePlugin) Configure(config types.PluginConfig) error { return ni
 
 func (p *UdbSamplePlugin) GetBoardMap() map[string]types.Board[any] {
 	return map[string]types.Board[any]{
-		"single-colour": boards.NewSingleColourBoard("single-colour"),
-		"digital-clock": boards.NewDigitalClockBoard("digital-clock"),
+		"single-colour":  boards.NewSingleColourBoard("single-colour"),
+		"digital-clock":  boards.NewDigitalClockBoard("digital-clock"),
+		"gradient":       boards.NewGradientBoard("gradient"),
+		"rainbow":        boards.NewRainbowBoard("rainbow"),
+		"sprite":         boards.NewSpriteBoard("sprite"),
+		"gif":            boards.NewGifBoard("gif"),
+		"scrolling-text": boards.NewScrollingTextBoard("scrolling-text"),
 	}
 }
 
