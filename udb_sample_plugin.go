@@ -1,16 +1,16 @@
-// package udb_plugin_samples
-package main
+package udb_plugin_samples
 
 import (
 	udb_plugin_library "github.com/benwiebe/udb-plugin-library"
 	"github.com/benwiebe/udb-plugin-library/types"
 
-	"github.com/benwiebe/udb-core/boards"
-	"github.com/benwiebe/udb-core/datasources"
+	"github.com/benwiebe/udb-plugin-samples/boards"
+	"github.com/benwiebe/udb-plugin-samples/datasources"
 )
 
-// Plugin is the symbol looked up by udb-core when loading this plugin.
-var Plugin udb_plugin_library.UdbPlugin = &UdbSamplePlugin{}
+func init() {
+	udb_plugin_library.Register(&UdbSamplePlugin{})
+}
 
 type UdbSamplePlugin struct{}
 

@@ -1,4 +1,4 @@
-module github.com/benwiebe/udb-core
+module github.com/benwiebe/udb-plugin-samples
 
 go 1.25.1
 
