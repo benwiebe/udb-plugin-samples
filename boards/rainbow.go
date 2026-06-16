@@ -37,7 +37,7 @@ func (b *RainbowBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *RainbowBoard) GetType() types.BoardType  { return types.BoardTypeDynamic }
 func (b *RainbowBoard) GetDatasourceType() string { return "" }
 
-func (b *RainbowBoard) Init(cfg json.RawMessage, _ types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *RainbowBoard) Init(cfg json.RawMessage, _ types.Datasource, dimensions types.BoardDimensions) error {
 	b.dims = dimensions
 	b.speed = 2.0
 	b.vertical = false

@@ -45,7 +45,7 @@ func (b *ScrollingTextBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *ScrollingTextBoard) GetType() types.BoardType  { return types.BoardTypeDynamic }
 func (b *ScrollingTextBoard) GetDatasourceType() string { return "" }
 
-func (b *ScrollingTextBoard) Init(cfg json.RawMessage, _ types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *ScrollingTextBoard) Init(cfg json.RawMessage, _ types.Datasource, dimensions types.BoardDimensions) error {
 	text := "Hello, World!"
 	textColour := color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	bgColour := color.RGBA{R: 0, G: 0, B: 0, A: 255}

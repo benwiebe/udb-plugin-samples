@@ -33,7 +33,7 @@ func (b *GradientBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *GradientBoard) GetType() types.BoardType  { return types.BoardTypeStatic }
 func (b *GradientBoard) GetDatasourceType() string { return "" }
 
-func (b *GradientBoard) Init(cfg json.RawMessage, _ types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *GradientBoard) Init(cfg json.RawMessage, _ types.Datasource, dimensions types.BoardDimensions) error {
 	from := color.RGBA{R: 0, G: 0, B: 0, A: 255}
 	to := color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	direction := "horizontal"

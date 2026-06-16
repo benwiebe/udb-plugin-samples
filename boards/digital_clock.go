@@ -33,7 +33,7 @@ func init() {
 //   - blinkColon: toggle colon separators off on odd seconds (default true)
 type DigitalClockBoard struct {
 	id         string
-	datasource types.Datasource[any]
+	datasource types.Datasource
 	format     string
 	colour     color.Color
 	blinkColon bool
@@ -57,7 +57,7 @@ func (b *DigitalClockBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *DigitalClockBoard) GetType() types.BoardType  { return types.BoardTypeDynamic }
 func (b *DigitalClockBoard) GetDatasourceType() string { return "UdbSamplePlugin/CurrentTime" }
 
-func (b *DigitalClockBoard) Init(cfg json.RawMessage, datasource types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *DigitalClockBoard) Init(cfg json.RawMessage, datasource types.Datasource, dimensions types.BoardDimensions) error {
 	b.datasource = datasource
 	b.format = "15:04"
 	b.colour = color.White

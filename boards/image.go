@@ -45,7 +45,7 @@ func (b *ImageBoard) GetSupportedDimensions() []types.BoardDimensions {
 func (b *ImageBoard) GetType() types.BoardType  { return types.BoardTypeStatic }
 func (b *ImageBoard) GetDatasourceType() string { return "" }
 
-func (b *ImageBoard) Init(cfg json.RawMessage, _ types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *ImageBoard) Init(cfg json.RawMessage, _ types.Datasource, dimensions types.BoardDimensions) error {
 	path := ""
 	fit := "fit"
 

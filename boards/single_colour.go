@@ -47,7 +47,7 @@ func (b *SingleColourBoard) GetDatasourceType() string {
 
 // Init accepts an optional config JSON with a "colour" field containing a hex colour string
 // (e.g. "#FF0000" or "FF0000"). Defaults to white if omitted.
-func (b *SingleColourBoard) Init(cfg json.RawMessage, datasource types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *SingleColourBoard) Init(cfg json.RawMessage, datasource types.Datasource, dimensions types.BoardDimensions) error {
 	if len(cfg) > 0 {
 		var parsed struct {
 			Colour string `json:"colour"`

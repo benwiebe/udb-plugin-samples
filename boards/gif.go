@@ -40,7 +40,7 @@ func (b *GifBoard) GetSupportedDimensions() []types.BoardDimensions { return []t
 func (b *GifBoard) GetType() types.BoardType                        { return types.BoardTypeAnimated }
 func (b *GifBoard) GetDatasourceType() string                       { return "" }
 
-func (b *GifBoard) Init(cfg json.RawMessage, _ types.Datasource[any], dimensions types.BoardDimensions) error {
+func (b *GifBoard) Init(cfg json.RawMessage, _ types.Datasource, dimensions types.BoardDimensions) error {
 	path := ""
 	if len(cfg) > 0 {
 		var parsed struct {
