@@ -29,15 +29,14 @@ var defaultSpriteBytes []byte
 //     "fill" — scale to fill the display, cropping edges to preserve aspect ratio
 //     "stretch" — ignore aspect ratio and stretch to the exact display size
 type ImageBoard struct {
-	id          string
 	cachedImage image.Image
 }
 
-func NewSpriteBoard(id string) *ImageBoard {
-	return &ImageBoard{id: id}
+func NewSpriteBoard() *ImageBoard {
+	return &ImageBoard{}
 }
 
-func (b *ImageBoard) GetId() string   { return b.id }
+func (b *ImageBoard) GetId() string   { return "sprite" }
 func (b *ImageBoard) GetName() string { return "Image" }
 func (b *ImageBoard) GetSupportedDimensions() []types.BoardDimensions {
 	return []types.BoardDimensions{}

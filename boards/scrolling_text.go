@@ -25,7 +25,6 @@ import (
 //   - background: background colour as a hex string (default black)
 //   - speed:      pixels to advance per frame (default 2)
 type ScrollingTextBoard struct {
-	id        string
 	speed     int
 	dims      types.BoardDimensions
 	textBuf   *image.RGBA // full pre-rendered text row, height == dims.Height
@@ -33,11 +32,11 @@ type ScrollingTextBoard struct {
 	offset    int // x position of the text's left edge relative to the display
 }
 
-func NewScrollingTextBoard(id string) *ScrollingTextBoard {
-	return &ScrollingTextBoard{id: id}
+func NewScrollingTextBoard() *ScrollingTextBoard {
+	return &ScrollingTextBoard{}
 }
 
-func (b *ScrollingTextBoard) GetId() string   { return b.id }
+func (b *ScrollingTextBoard) GetId() string   { return "scrolling-text" }
 func (b *ScrollingTextBoard) GetName() string { return "Scrolling Text" }
 func (b *ScrollingTextBoard) GetSupportedDimensions() []types.BoardDimensions {
 	return []types.BoardDimensions{}

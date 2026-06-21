@@ -17,15 +17,14 @@ import (
 //   - to:        end colour as a hex string, e.g. "#0000FF" (default white)
 //   - direction: "horizontal" (default), "vertical", or "diagonal"
 type GradientBoard struct {
-	id          string
 	cachedImage image.Image
 }
 
-func NewGradientBoard(id string) *GradientBoard {
-	return &GradientBoard{id: id}
+func NewGradientBoard() *GradientBoard {
+	return &GradientBoard{}
 }
 
-func (b *GradientBoard) GetId() string   { return b.id }
+func (b *GradientBoard) GetId() string   { return "gradient" }
 func (b *GradientBoard) GetName() string { return "Gradient" }
 func (b *GradientBoard) GetSupportedDimensions() []types.BoardDimensions {
 	return []types.BoardDimensions{}

@@ -26,15 +26,14 @@ var defaultGIFBytes []byte
 // Optional JSON config fields:
 //   - path: filesystem path to a GIF file; uses the embedded sample if omitted
 type GifBoard struct {
-	id     string
 	frames types.Animation
 }
 
-func NewGifBoard(id string) *GifBoard {
-	return &GifBoard{id: id}
+func NewGifBoard() *GifBoard {
+	return &GifBoard{}
 }
 
-func (b *GifBoard) GetId() string                                   { return b.id }
+func (b *GifBoard) GetId() string                                   { return "gif" }
 func (b *GifBoard) GetName() string                                 { return "Animated GIF" }
 func (b *GifBoard) GetSupportedDimensions() []types.BoardDimensions { return []types.BoardDimensions{} }
 func (b *GifBoard) GetType() types.BoardType                        { return types.BoardTypeAnimated }

@@ -18,20 +18,20 @@ func (p *UdbSamplePlugin) GetId() string                             { return "u
 func (p *UdbSamplePlugin) GetName() string                           { return "UDB Sample Plugin" }
 func (p *UdbSamplePlugin) Configure(config types.PluginConfig) error { return nil }
 
-func (p *UdbSamplePlugin) GetBoardMap() map[string]types.Board {
-	return map[string]types.Board{
-		"single-colour":  boards.NewSingleColourBoard("single-colour"),
-		"digital-clock":  boards.NewDigitalClockBoard("digital-clock"),
-		"gradient":       boards.NewGradientBoard("gradient"),
-		"rainbow":        boards.NewRainbowBoard("rainbow"),
-		"sprite":         boards.NewSpriteBoard("sprite"),
-		"gif":            boards.NewGifBoard("gif"),
-		"scrolling-text": boards.NewScrollingTextBoard("scrolling-text"),
+func (p *UdbSamplePlugin) GetBoardMap() map[string]types.BoardFactory {
+	return map[string]types.BoardFactory{
+		"single-colour":  func() types.Board { return boards.NewSingleColourBoard() },
+		"digital-clock":  func() types.Board { return boards.NewDigitalClockBoard() },
+		"gradient":       func() types.Board { return boards.NewGradientBoard() },
+		"rainbow":        func() types.Board { return boards.NewRainbowBoard() },
+		"sprite":         func() types.Board { return boards.NewSpriteBoard() },
+		"gif":            func() types.Board { return boards.NewGifBoard() },
+		"scrolling-text": func() types.Board { return boards.NewScrollingTextBoard() },
 	}
 }
 
-func (p *UdbSamplePlugin) GetDatasourceMap() map[string]types.Datasource {
-	return map[string]types.Datasource{
-		"current-time": &datasources.CurrentTimeDatasource{},
+func (p *UdbSamplePlugin) GetDatasourceMap() map[string]types.DatasourceFactory {
+	return map[string]types.DatasourceFactory{
+		"current-time": func() types.Datasource { return &datasources.CurrentTimeDatasource{} },
 	}
 }

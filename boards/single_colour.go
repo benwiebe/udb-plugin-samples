@@ -15,19 +15,15 @@ import (
 // SingleColourBoard is a trivial example of a UDB board which displays a single colour
 // on the entire display.
 type SingleColourBoard struct {
-	id          string
 	colour      color.Color
 	cachedImage image.Image
 }
 
-// NewSingleColourBoard creates a SingleColourBoard with the given ID.
-func NewSingleColourBoard(id string) *SingleColourBoard {
-	return &SingleColourBoard{id: id}
+func NewSingleColourBoard() *SingleColourBoard {
+	return &SingleColourBoard{}
 }
 
-func (b *SingleColourBoard) GetId() string {
-	return b.id
-}
+func (b *SingleColourBoard) GetId() string { return "single-colour" }
 
 func (b *SingleColourBoard) GetName() string {
 	return "Single Colour"

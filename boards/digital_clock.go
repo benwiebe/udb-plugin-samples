@@ -32,7 +32,6 @@ func init() {
 //   - colour:     hex colour for the digits, e.g. "#FF0000" (default white)
 //   - blinkColon: toggle colon separators off on odd seconds (default true)
 type DigitalClockBoard struct {
-	id         string
 	datasource types.Datasource
 	format     string
 	colour     color.Color
@@ -45,11 +44,11 @@ type DigitalClockBoard struct {
 	cachedSrc  *image.Uniform  // pre-allocated colour source
 }
 
-func NewDigitalClockBoard(id string) *DigitalClockBoard {
-	return &DigitalClockBoard{id: id}
+func NewDigitalClockBoard() *DigitalClockBoard {
+	return &DigitalClockBoard{}
 }
 
-func (b *DigitalClockBoard) GetId() string   { return b.id }
+func (b *DigitalClockBoard) GetId() string   { return "digital-clock" }
 func (b *DigitalClockBoard) GetName() string { return "Digital Clock" }
 func (b *DigitalClockBoard) GetSupportedDimensions() []types.BoardDimensions {
 	return []types.BoardDimensions{}

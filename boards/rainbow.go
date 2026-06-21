@@ -18,18 +18,17 @@ import (
 //   - speed:    degrees of hue shift per frame (default 2.0; negative reverses direction)
 //   - vertical: if true, the rainbow runs top-to-bottom instead of left-to-right (default false)
 type RainbowBoard struct {
-	id       string
 	speed    float64
 	vertical bool
 	dims     types.BoardDimensions
 	offset   float64
 }
 
-func NewRainbowBoard(id string) *RainbowBoard {
-	return &RainbowBoard{id: id}
+func NewRainbowBoard() *RainbowBoard {
+	return &RainbowBoard{}
 }
 
-func (b *RainbowBoard) GetId() string   { return b.id }
+func (b *RainbowBoard) GetId() string   { return "rainbow" }
 func (b *RainbowBoard) GetName() string { return "Rainbow" }
 func (b *RainbowBoard) GetSupportedDimensions() []types.BoardDimensions {
 	return []types.BoardDimensions{}
